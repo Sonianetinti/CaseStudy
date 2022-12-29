@@ -1,0 +1,44 @@
+﻿@model CarWashFrontEnd.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "LoginUser";
+}
+
+<h2>LoginUser</h2>
+<style>
+    body {
+        background-image: url('https://www.shell.ca/en_ca/motorists/shell-canada-car-wash/_jcr_content/par/grid_562368221/p0/contentblock_copy/image.img.960.jpeg/1664395343561/carwash.jpeg?imwidth=960');
+        background-position: inherit;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    </style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <hr />
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput2" class="form-label">Password</label>
+        <input type="password" class="form-control" id="exampleFormControlInput2">
+    </div>
+
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Login" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+

@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarWashDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Addon">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Address">
+    <Key>
+      <PropertyRef Name="AddressId" />
+    </Key>
+    <Property Name="Id" Type="Int32" />
+    <Property Name="City" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PinCode" Type="Int32" Nullable="false" />
+    <Property Name="AddressId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="UserTable" Relationship="Self.address_Id_FK" FromRole="Address" ToRole="UserTable" />
+    <NavigationProperty Name="Orders" Relationship="Self.order_addressIdFk" FromRole="Address" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Admin">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Car">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="CarModel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="PackageId" Type="Int32" Nullable="false" />
+    <Property Name="AddressId" Type="Int32" Nullable="false" />
+    <Property Name="WashInstructions" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="DateofWash" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <Property Name="PromoCodeId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Address" Relationship="Self.order_addressIdFk" FromRole="Orders" ToRole="Address" />
+    <NavigationProperty Name="Package" Relationship="Self.order_packageid_Fk" FromRole="Orders" ToRole="Package" />
+  </EntityType>
+  <EntityType Name="Package">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Price" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="Self.order_packageid_Fk" FromRole="Package" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="PromoCode">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Discount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Addresses" Relationship="Self.address_Id_FK" FromRole="UserTable" ToRole="Address" />
+  </EntityType>
+  <Association Name="address_Id_FK">
+    <End Role="UserTable" Type="Self.UserTable" Multiplicity="0..1" />
+    <End Role="Address" Type="Self.Address" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserTable">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Address">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="order_addressIdFk">
+    <End Role="Address" Type="Self.Address" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Address">
+        <PropertyRef Name="AddressId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="AddressId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="order_packageid_Fk">
+    <End Role="Package" Type="Self.Package" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Package">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="PackageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CarWashDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Addons" EntityType="Self.Addon" />
+    <EntitySet Name="Addresses" EntityType="Self.Address" />
+    <EntitySet Name="Admins" EntityType="Self.Admin" />
+    <EntitySet Name="Cars" EntityType="Self.Car" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <EntitySet Name="Packages" EntityType="Self.Package" />
+    <EntitySet Name="PromoCodes" EntityType="Self.PromoCode" />
+    <EntitySet Name="UserTables" EntityType="Self.UserTable" />
+    <AssociationSet Name="address_Id_FK" Association="Self.address_Id_FK">
+      <End Role="UserTable" EntitySet="UserTables" />
+      <End Role="Address" EntitySet="Addresses" />
+    </AssociationSet>
+    <AssociationSet Name="order_addressIdFk" Association="Self.order_addressIdFk">
+      <End Role="Address" EntitySet="Addresses" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="order_packageid_Fk" Association="Self.order_packageid_Fk">
+      <End Role="Package" EntitySet="Packages" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

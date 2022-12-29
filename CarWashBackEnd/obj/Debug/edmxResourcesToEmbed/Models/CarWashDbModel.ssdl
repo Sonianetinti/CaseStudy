@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarWashDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Addon">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Description" Type="varchar" MaxLength="250" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Address">
+    <Key>
+      <PropertyRef Name="AddressId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="City" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="State" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="PinCode" Type="int" Nullable="false" />
+    <Property Name="AddressId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Admin">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="Car">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="CarModel" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="PackageId" Type="int" Nullable="false" />
+    <Property Name="AddressId" Type="int" Nullable="false" />
+    <Property Name="WashInstructions" Type="varchar" MaxLength="250" />
+    <Property Name="DateofWash" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="PromoCodeId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Package">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Description" Type="varchar" MaxLength="250" />
+    <Property Name="Price" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PromoCode">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Discount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="LastName" Type="varchar" MaxLength="20" />
+    <Property Name="PhoneNumber" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Role" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="address_Id_FK">
+    <End Role="UserTable" Type="Self.UserTable" Multiplicity="0..1" />
+    <End Role="Address" Type="Self.Address" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserTable">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Address">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="order_addressIdFk">
+    <End Role="Address" Type="Self.Address" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Address">
+        <PropertyRef Name="AddressId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="AddressId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="order_packageid_Fk">
+    <End Role="Package" Type="Self.Package" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Package">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="PackageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CarWashDbModelStoreContainer">
+    <EntitySet Name="Addon" EntityType="Self.Addon" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Package" EntityType="Self.Package" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PromoCode" EntityType="Self.PromoCode" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserTable" EntityType="Self.UserTable" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="address_Id_FK" Association="Self.address_Id_FK">
+      <End Role="UserTable" EntitySet="UserTable" />
+      <End Role="Address" EntitySet="Address" />
+    </AssociationSet>
+    <AssociationSet Name="order_addressIdFk" Association="Self.order_addressIdFk">
+      <End Role="Address" EntitySet="Address" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="order_packageid_Fk" Association="Self.order_packageid_Fk">
+      <End Role="Package" EntitySet="Package" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
